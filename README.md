@@ -74,6 +74,28 @@ Copy `.env.example` to `.env` and set your values:
 
 - `VITE_API_BASE_URL` (required): backend API base URL
 
+## Setting up your own containerised server
+### Creating a Docker Container
+Note: If you are running this on WSL (Ubuntu), you may need to open Docker Desktop first before executing the following commands.
+
+1. Setup your ```.env``` file in the project root folder, following the ```.env.example``` template.
+
+2. Create / Build the docker image file with the name ```cinecritic_frontend_image```.
+```
+docker build -t cinecritic_frontend_image .
+```
+
+3. Run the image using the compose file. The container will have the name ```cinecritic-frontend-app```.
+```
+docker compose up -d
+```
+
+### Updating the Docker Container
+1. Update the docker file
+```
+docker compose up --build
+```
+
 ## 🧪 Commands
 
 - `npm run dev` - start the dev server
