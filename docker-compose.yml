@@ -6,7 +6,6 @@ services:
   app:
     build:
       context: .
-      # target: production
     # Mounts a copy of the .env file on the host 
     # inside the docker container
     env_file: .env
