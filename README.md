@@ -15,6 +15,7 @@ Movie review and discovery platform built with React, backed by our
 - [Hardware Requirements](#-hardware-requirements)
 - [Frontend Install Instructions](#-frontend-install-instructions)
 - [Environment Variables](#-environment-variables)
+- [Setting up your own containerised server](#-setting-up-your-own-containerised-server)
 - [Commands](#-commands)
 - [Authentication](#-authentication)
 - [Code Style Guide](#-code-style-guide)
@@ -80,9 +81,10 @@ Note: If you are running this on WSL (Ubuntu), you may need to open Docker Deskt
 
 1. Setup your ```.env``` file in the project root folder, following the ```.env.example``` template.
 
-2. Create / Build the docker image file with the name ```cinecritic_frontend_image```.
+2. Create a clean install of the front end
 ```
-docker build -t cinecritic_frontend_image .
+docker compose down --remove-orphans 
+docker compose build --no-cache
 ```
 
 3. Run the image using the compose file. The container will have the name ```cinecritic-frontend-app```.
