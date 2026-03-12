@@ -1,4 +1,4 @@
-# Stage 1: Build the application with a clean install
+# Build the application with a clean install
 # of the dependencies.
 # Current stable version of Node: v24.11.1
 FROM node:24 AS builder
@@ -14,24 +14,8 @@ COPY package*.json ./
 # application, devdependencies needed.
 RUN npm install
 
-# Stage 2: Build and run the application
-# For speed optimization purposes, we'll do a clean 
-# install of the dependencies first, then copy over 
-# the remaining files
-# FROM node:24 AS production
-
-# WORKDIR /app
-
-# COPY --from=builder /app/node_modules ./node_modules
-
 # Copy the remaining files
 COPY . .
-
-# Create the application user and assign the default
-# user when opening the application as basicUser for
-# security purposes
-# RUN groupadd application-users && useradd basic-user -G application-users
-# USER basic-user
 
 # Map and open up port 5173 to allow outside
 # access to the containerised application
