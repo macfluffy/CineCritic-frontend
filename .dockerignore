@@ -1,0 +1,12 @@
+# Environment Variables
+.env
+
+# Git Repository Environment
+.git
+.github
+.gitignore
+
+# Build Files
+dist
+node_modules
+tests

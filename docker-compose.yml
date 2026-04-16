@@ -1,0 +1,27 @@
+# The application is built on an NPM-Vite server,
+# with the frontend built on a React framework.
+# This requires the backend server to be running,
+# to function correctly.
+services:
+  app:
+    build:
+      context: .
+    # Mounts a copy of the .env file on the host 
+    # inside the docker container
+    env_file: .env
+    # Setup network for the backend and frontend 
+    # containers to communicate with each other
+    networks:
+      - cinecritics-network
+    # Map the host computer's port to 5173, to make 
+    # the app accessible to the outside
+    ports:
+      - "5173:5173"
+    restart: unless-stopped
+
+# Bridge network provides connection to local services.
+# Network the backend, database, and frontend together
+# so the containers can talk to each other.
+networks:
+  cinecritics-network:
+    driver: bridge

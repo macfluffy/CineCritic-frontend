@@ -1,0 +1,26 @@
+name: Lint code
+
+on:
+    # Only trigger this workflow when it is called
+    workflow_call:
+
+jobs:
+    lint:
+        name: Linting the code
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout the latest version of the code
+              uses: actions/checkout@v6
+
+            - name: Setup the node environment
+              uses:  actions/setup-node@v6
+              with:
+                node-version: "24.11.1"
+                cache: "npm"
+
+            - name: Install dependencies with a clean install
+              run: npm ci
+
+            - name: Run the linter
+              run: npm run lint

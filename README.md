@@ -15,6 +15,7 @@ Movie review and discovery platform built with React, backed by our
 - [Hardware Requirements](#-hardware-requirements)
 - [Frontend Install Instructions](#-frontend-install-instructions)
 - [Environment Variables](#-environment-variables)
+- [Setting up your own containerised server](#-setting-up-your-own-containerised-server)
 - [Commands](#-commands)
 - [Authentication](#-authentication)
 - [Code Style Guide](#-code-style-guide)
@@ -73,6 +74,29 @@ Movie review and discovery platform built with React, backed by our
 Copy `.env.example` to `.env` and set your values:
 
 - `VITE_API_BASE_URL` (required): backend API base URL
+
+## Setting up your own containerised server
+### Creating a Docker Container
+Note: If you are running this on WSL (Ubuntu), you may need to open Docker Desktop first before executing the following commands.
+
+1. Setup your ```.env``` file in the project root folder, following the ```.env.example``` template.
+
+2. Create a clean install of the front end
+```
+docker compose down --remove-orphans 
+docker compose build --no-cache
+```
+
+3. Run the image using the compose file. The container will have the name ```cinecritic-frontend-app```.
+```
+docker compose up -d
+```
+
+### Updating the Docker Container
+1. Update the docker file
+```
+docker compose up --build
+```
 
 ## 🧪 Commands
 
@@ -188,3 +212,25 @@ See TMDB documentation: https://developer.themoviedb.org/docs
 | Reviews     | `GET /api/reviews/{tmdbId}`, `POST /api/reviews`, `PUT /api/reviews/{id}`, `DELETE /api/reviews/{id}`                         |
 | Watchlist   | `GET /api/watchlist/{userId}`, `POST /api/watchlist`, `PUT /api/watchlist/{id}`, `DELETE /api/watchlist/{id}`                 |
 | Favourites  | `GET /api/favourites/{userId}`, `POST /api/favourites`, `DELETE /api/favourites/{userId}/{tmdbId}`                            |
+## CI/CD Pipeline
+Need a SECRETS manager
+
+On pull requests:
+1. Merging code into the main branch
+
+We only need to run an automation run on pull requests, whenever someone wants to merge their code into the main branch.
+
+Whenever a user creates a pull request wanting to merge their feature on to the main branch, the Github Action workflow will:
+   - Lint the code
+   - then Test it
+   - and create a test log
+
+If successful, the user can have their code merged after a supervisor reviews it.
+
+2. Containerising / Packing the application into a Docker Container
+
+After the code has been approved for review, we containerise the application so that it can be hosted on cloud servers.
+
+3. Create an EC2 Instance
+4. Create a role, set the permissions
+5. Push the application into the EC2 instance

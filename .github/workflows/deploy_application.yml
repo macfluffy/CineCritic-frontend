@@ -1,0 +1,16 @@
+name: Deploy application onto AWS servers
+
+on:
+    workflow_dispatch:
+    push:
+        branches: [ "main" ]
+
+jobs:
+    containerise-application:
+        name: Containerising App
+        uses: ./.github/workflows/containerise_application.yml
+
+    deploy-container:
+        name: Deploying Container
+        needs: containerise-application
+        uses: ./.github/workflows/deploy_container.yml
