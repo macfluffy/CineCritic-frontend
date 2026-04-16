@@ -27,6 +27,8 @@ jobs:
 
             - name: Archive the test report
               uses: actions/upload-artifact@v7.0.0
+              # Logs the test report even if this job fails
+              if: always()
               with:
                 name: test_report
                 path: testlogs/test_report.txt
