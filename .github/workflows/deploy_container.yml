@@ -1,0 +1,53 @@
+name: Deploy container to cloud
+
+on:
+    workflow_dispatch:
+    workflow_call:
+
+env:
+    IMAGE_NAME: ${{ github.repository }}
+    REGISTRY: ghcr.io
+
+jobs:
+    deploy-container-to-cloud:
+        runs-on: ubuntu-latest
+
+        permissions:
+            contents: read
+
+        env:
+            AWS_REGION: ap-southeast-2
+            ECS_CLUSTER: CineCriticCluster
+            ECS_SERVICE: CineCriticService
+            ECS_TASK_DEFINITION: task-definition.json
+            CONTAINER_NAME: CineCriticContainer
+
+        steps:
+            - name: Checkout the latest version of the code
+              uses: actions/checkout@v6
+
+            - name: Configure aws credentials
+              uses: aws-actions/configure-aws-credentials@v6.0.0
+              with:
+                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                aws-region: ${{ env.AWS_REGION }}
+            
+            - name: Verify aws identity
+              run: aws sts get-caller-identity
+
+            - name: Fill in the new image id in the amazon ecs task definition
+              id: task-definer
+              uses: aws-actions/amazon-ecs-render-task-definition@v1
+              with:
+                task-definition: ${{ env.ECS_TASK_DEFINITION }}
+                container-name: ${{ env.CONTAINER_NAME }}
+                image: ghcr.io/${{ github.repository }}:latest
+
+            - name: Deploy amazon ecs task definition
+              uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+              with:
+                task-definition: ${{ steps.task-definer.outputs.task-definition }}
+                service: ${{ env.ECS_SERVICE }}
+                cluster: ${{ env.ECS_CLUSTER }}
+                wait-for-service-stability: true
