@@ -1,0 +1,47 @@
+name: Create docker image
+
+on:
+    workflow_dispatch:
+    pull_request:
+      branches: [ "main" ]
+    push:
+        branches: [ "main" ]
+
+env:
+    IMAGE_NAME: ${{ github.repository }}
+    REGISTRY: ghcr.io
+
+jobs:
+    build-and-push-image:
+        runs-on: ubuntu-latest
+        permissions:
+            packages: write
+            contents: read
+
+        steps:
+            - name: Checkout the latest version of the code
+              uses: actions/checkout@v6
+
+            - name: Login to docker
+              uses: docker/login-action@v4.0.0
+              with:
+                registry: ${{ env.REGISTRY }}
+                username: ${{ github.actor }}
+                password: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Docker Metadata action
+              uses: docker/metadata-action@v6.0.0
+              id: meta
+              with:
+                images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+                tags: |
+                    type=sha,prefix=sha-,format=short
+                    type=raw,value=latest
+
+            - name: Build and push docker image
+              uses: docker/build-push-action@v7.0.0
+              with:
+                context: .
+                push: true
+                tags: ${{ steps.meta.outputs.tags }}
+                labels: ${{ steps.meta.outputs.labels }}   
