@@ -23,7 +23,7 @@ jobs:
               run: npm ci
 
             - name: Run the test
-              run: CI=true npm run test > report.txt
+              run: npm run test > report.txt
 
             - name: Archive the test report
               uses: actions/upload-artifact@v7.0.0
