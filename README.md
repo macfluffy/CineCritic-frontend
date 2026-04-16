@@ -212,6 +212,7 @@ See TMDB documentation: https://developer.themoviedb.org/docs
 | Reviews     | `GET /api/reviews/{tmdbId}`, `POST /api/reviews`, `PUT /api/reviews/{id}`, `DELETE /api/reviews/{id}`                         |
 | Watchlist   | `GET /api/watchlist/{userId}`, `POST /api/watchlist`, `PUT /api/watchlist/{id}`, `DELETE /api/watchlist/{id}`                 |
 | Favourites  | `GET /api/favourites/{userId}`, `POST /api/favourites`, `DELETE /api/favourites/{userId}/{tmdbId}`                            |
+
 ## CI/CD Pipeline
 Need a SECRETS manager
 

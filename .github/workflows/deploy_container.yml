@@ -1,9 +1,9 @@
 name: Deploy container to cloud
 
 on:
+    # Only trigger this workflow when it is called or manually executed  
     workflow_dispatch:
-    push:
-        branches: ['main']
+    workflow_call:
 
 env:
     IMAGE_NAME: ${{ github.repository }}
