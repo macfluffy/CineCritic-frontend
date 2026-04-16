@@ -1,6 +1,7 @@
 name: Create docker image
 
 on:
+    # Only trigger this workflow when it is called or manually executed
     workflow_dispatch:
     workflow_call:
 
