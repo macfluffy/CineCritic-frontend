@@ -232,6 +232,7 @@ If successful, the user can have their code merged after a supervisor reviews it
 
 After the code has been approved for review, we containerise the application so that it can be hosted on cloud servers.
 
-3. Create an EC2 Instance
-4. Create a role, set the permissions
-5. Push the application into the EC2 instance
+3. Spin up EC2 instances through ECS
+
+a. Create the Task Definition
+b. Create the Container Definition

@@ -20,6 +20,8 @@ jobs:
             - name: Checkout the latest version of the code
               uses: actions/checkout@v6
 
+            # You don't need to create a Personal Access Token, the
+            # {{ secrets.GITHUB_TOKEN }} will automatically do this
             - name: Login to docker
               uses: docker/login-action@v4.0.0
               with:
