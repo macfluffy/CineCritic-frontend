@@ -10,6 +10,7 @@ jobs:
         name: Containerising App
         uses: ./.github/workflows/containerise_application.yml
 
+    # This job fails because it needs the environment and secrets outside?
     deploy-container:
         name: Deploying Container
         needs: containerise-application
