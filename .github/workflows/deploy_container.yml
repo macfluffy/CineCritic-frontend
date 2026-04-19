@@ -21,7 +21,7 @@ jobs:
             AWS_REGION: ap-southeast-2
             ECR_REPOSITORY: cinecritic-frontend
             ECS_CLUSTER: cinecritic-cluster
-            # ECS_SERVICE: cinecritic-frontend-launcher
+            ECS_SERVICE: cinecritic-frontend-launcher
             ECS_TASK_DEFINITION: task-definition.json
             CONTAINER_NAME: cinecritic-frontend-container
 
@@ -40,8 +40,9 @@ jobs:
               id: login-ecr
               uses: aws-actions/amazon-ecr-login@62f4f872db3836360b72999f4b87f1ff13310f3a
 
-            - name: Verify aws identity
-              run: aws sts get-caller-identity
+            # Uncomment this step to verify your identity is correct
+            # - name: Verify aws identity
+            #   run: aws sts get-caller-identity
 
             - name: Fill in the new image id in the amazon ecs task definition
               id: task-definer
@@ -55,6 +56,6 @@ jobs:
               uses: aws-actions/amazon-ecs-deploy-task-definition@v2
               with:
                 task-definition: ${{ steps.task-definer.outputs.task-definition }}
-                # service: ${{ env.ECS_SERVICE }}
+                service: ${{ env.ECS_SERVICE }}
                 cluster: ${{ env.ECS_CLUSTER }}
                 wait-for-service-stability: true
