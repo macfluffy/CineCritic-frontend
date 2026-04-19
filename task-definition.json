@@ -1,0 +1,78 @@
+{
+  "taskDefinitionArn": "arn:aws:ecs:ap-southeast-2:775964394906:task-definition/cinecritic-frontend-launcher:1",
+  "containerDefinitions": [
+    {
+      "name": "cinecritic-frontend-container",
+      "image": "775964394906.dkr.ecr.ap-southeast-2.amazonaws.com/cinecritic-frontend@sha256:929aad333ef96528d2e6c281fd3c0f75ef88ae271e600ee81c3c0e25a20eb3a1",
+      "cpu": 0,
+      "portMappings": [
+        {
+          "containerPort": 5173,
+          "hostPort": 5173,
+          "protocol": "tcp",
+          "name": "cinecritic-frontend-container-5173-tcp",
+          "appProtocol": "http"
+        }
+      ],
+      "essential": true,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/cinecritic-frontend-launcher",
+          "awslogs-create-group": "true",
+          "awslogs-region": "ap-southeast-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ],
+  "family": "cinecritic-frontend-launcher",
+  "executionRoleArn": "arn:aws:iam::775964394906:role/ecsTaskExecutionRole",
+  "networkMode": "awsvpc",
+  "revision": 1,
+  "status": "ACTIVE",
+  "requiresAttributes": [
+    {
+      "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+    },
+    {
+      "name": "ecs.capability.execution-role-awslogs"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.ecr-auth"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.21"
+    },
+    {
+      "name": "ecs.capability.execution-role-ecr-pull"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+    },
+    {
+      "name": "ecs.capability.task-eni"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
+    }
+  ],
+  "compatibilities": [
+    "EC2",
+    "MANAGED_INSTANCES",
+    "FARGATE"
+  ],
+  "runtimePlatform": {
+    "cpuArchitecture": "X86_64",
+    "operatingSystemFamily": "LINUX"
+  },
+  "requiresCompatibilities": [
+    "EC2"
+  ],
+  "cpu": "1024",
+  "memory": "3072",
+  "enableFaultInjection": false
+}
