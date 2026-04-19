@@ -44,6 +44,11 @@ jobs:
             # - name: Verify aws identity
             #   run: aws sts get-caller-identity
 
+            # repo name to lowercase
+            - name: Convert repo name to lowercase
+              id: lowercase
+              run: echo "repo_name_lc=${GITHUB_REPOSITORY##*/}" | tr '[:upper:]' '[:lower:]' >> $GITHUB_ENV
+
             - name: Fill in the new image id in the amazon ecs task definition
               id: task-definer
               uses: aws-actions/amazon-ecs-render-task-definition@v1
