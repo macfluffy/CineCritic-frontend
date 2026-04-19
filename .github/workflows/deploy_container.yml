@@ -28,36 +28,36 @@ jobs:
           CONTAINER_NAME: cinecritic-frontend-container
             
         steps:
-            - name: Checkout the latest version of the code
-              uses: actions/checkout@v6
+          - name: Checkout the latest version of the code
+            uses: actions/checkout@v6
 
-            - name: Configure aws credentials
-              uses: aws-actions/configure-aws-credentials@v6.1.0
-              with:
-                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-                aws-region: ${{ env.AWS_REGION }}
-            
-            - name: Login to Amazon ECR
-              id: login-ecr
-              uses: aws-actions/amazon-ecr-login@62f4f872db3836360b72999f4b87f1ff13310f3a
+          - name: Configure aws credentials
+            uses: aws-actions/configure-aws-credentials@v6.1.0
+            with:
+              aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+              aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+              aws-region: ${{ env.AWS_REGION }}
+          
+          - name: Login to Amazon ECR
+            id: login-ecr
+            uses: aws-actions/amazon-ecr-login@62f4f872db3836360b72999f4b87f1ff13310f3a
 
-            # Uncomment this step to verify your identity is correct
-            # - name: Verify aws identity
-            #   run: aws sts get-caller-identity
+          # Uncomment this step to verify your identity is correct
+          # - name: Verify aws identity
+          #   run: aws sts get-caller-identity
 
-            - name: Fill in the new image id in the amazon ecs task definition
-              id: task-definer
-              uses: aws-actions/amazon-ecs-render-task-definition@v1
-              with:
-                task-definition: ${{ env.ECS_TASK_DEFINITION }}
-                container-name: ${{ env.CONTAINER_NAME }}
-                image: ghcr.io/${{ env.GITHUB_REPOSITORY }}:latest
+          - name: Fill in the new image id in the amazon ecs task definition
+            id: task-definer
+            uses: aws-actions/amazon-ecs-render-task-definition@v1
+            with:
+              task-definition: ${{ env.ECS_TASK_DEFINITION }}
+              container-name: ${{ env.CONTAINER_NAME }}
+              image: ghcr.io/${{ env.GITHUB_REPOSITORY }}:latest
 
-            - name: Deploy amazon ecs task definition
-              uses: aws-actions/amazon-ecs-deploy-task-definition@v2
-              with:
-                task-definition: ${{ steps.task-definer.outputs.task-definition }}
-                service: ${{ env.ECS_SERVICE }}
-                cluster: ${{ env.ECS_CLUSTER }}
-                wait-for-service-stability: true
+          - name: Deploy amazon ecs task definition
+            uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+            with:
+              task-definition: ${{ steps.task-definer.outputs.task-definition }}
+              service: ${{ env.ECS_SERVICE }}
+              cluster: ${{ env.ECS_CLUSTER }}
+              wait-for-service-stability: true

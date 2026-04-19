@@ -32,6 +32,7 @@ Movie review and discovery platform built with React, backed by our
 
 ## 🚀 Deployed URLs
 
+- Cloud Deployment: http://cinecritic-load-balancer-351804049.ap-southeast-2.elb.amazonaws.com/
 - Frontend App: https://cinecritic.app
 - Fallback (Vercel): https://cinecritic-fawn.vercel.app
 - Backend API: https://cinecritic.onrender.com
