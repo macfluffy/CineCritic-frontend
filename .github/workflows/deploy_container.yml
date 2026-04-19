@@ -18,6 +18,7 @@ jobs:
           contents: read
 
         env:
+          # Case sensitive, must be in lowercase
           GITHUB_REPOSITORY: macfluffy/cinecritic-frontend  
           AWS_REGION: ap-southeast-2
           ECR_REPOSITORY: cinecritic-frontend
