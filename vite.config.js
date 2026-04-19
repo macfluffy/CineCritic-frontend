@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: true,
+    allowedHosts: ["cinecritic-load-balancer-351804049.ap-southeast-2.elb.amazonaws.com"],
     port: 5173,
     watch: {
       usePolling: true,
