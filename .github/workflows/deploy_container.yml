@@ -50,7 +50,7 @@ jobs:
               with:
                 task-definition: ${{ env.ECS_TASK_DEFINITION }}
                 container-name: ${{ env.CONTAINER_NAME }}
-                image: ghcr.io/${{ github.repository }}:latest
+                image: ghcr.io/${{ github.repository }}
 
             - name: Deploy amazon ecs task definition
               uses: aws-actions/amazon-ecs-deploy-task-definition@v2
