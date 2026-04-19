@@ -230,9 +230,63 @@ If successful, the user can have their code merged after a supervisor reviews it
 
 2. Containerising / Packing the application into a Docker Container
 
-After the code has been approved for review, we containerise the application so that it can be hosted on cloud servers.
+After the code has been approved for review, we containerise the application so that it can be hosted on cloud servers. 
 
-3. Spin up EC2 instances through ECS
+Create a repository inside ECR. This is AWS's container repository, where you can store the container images of the front-end in aws.
 
-a. Create the Task Definition
-b. Create the Container Definition
+Create a repository for the front-end container (as well as the back-end).
+
+Create an admin user to be able to handle the ECR.
+Needs the permissions: 
+   AmazonEC2ContainerRegistryFullAccess
+   AmazonECS_FullAccess
+   AmazonECSTaskExecutionRolePolicy
+   CloudWatchFullAccess
+   SecretsManagerReadWrite
+
+Next create the access keys for the admin user. We need this access key to be able to SSH / push the docker containers to ECR through the AWS CLI.
+
+Download a copy and store your access keys somewhere safe. If you want to use them in your own repository, you can store them into your repository's secrets, and they can be accessed through github actions. Store them in the variables:
+   AWS_ACCESS_KEY_ID
+   AWS_SECRET_KEY
+
+Configure your account:
+```aws configure```
+
+Enter your access key id, secret key, region, and file format (optional)
+Connect to your IAM user to your docker (12 hour connection)
+```aws ecr get-login-password --region <region> | docker login --username AWS --pasword-stdin <aws ecr repository uri without the "/reponame" at the end>```
+
+Your console should output
+
+```Login Succeeded```
+
+Create the container.
+   Give the container image the tag name that matches the ECR uri (include the /reponame at the end of the uri)
+
+```docker tag cinecritic-frontend-app <aws ecr repository uri>```
+
+Push the docker image by tag name. The tag name will match the aws ecr repo uri
+```docker push <tag name>```
+
+3. Setup the Task Definition. This is our instruction set to launch a container / group of containers
+Goto ECS, create new Task Definition
+Give the task definition family a name
+Set to Amazon EC2 instances isntead of Fargate
+Under Task Execution Role, select the drop down menu and select ```ecsTaskExecutionRole```
+Add in the container definitions, Under Container - 1, give this container a name, then copy the ECR URI of the frontend docker image.
+Set the container port to 5173, or whatever is matching then Click create at the bottom.
+
+4. Deploy a grouping of EC2 instances to run our containers (aka Cluster)
+Still in the ECS page click Clusters
+Click Create Cluster
+Give the Cluster a name, we will opt to use a single cluster to handle all the containers for frontend and backend.
+Select Fargate then click Create Cluster.
+Run the Task the cluster we'll be using
+
+5. Attach the task to the cluster
+Select your cluster
+Click Tasks
+Run new task
+From the drop down select the task defined in #3.
+Create.
