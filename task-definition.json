@@ -2,7 +2,7 @@
   "taskDefinitionArn": "arn:aws:ecs:ap-southeast-2:775964394906:task-definition/cinecritic-frontend-launcher:1",
   "containerDefinitions": [
     {
-      "name": "cinecritic-frontend-container",
+      "name": "cinecritic-frontend",
       "image": "775964394906.dkr.ecr.ap-southeast-2.amazonaws.com/cinecritic-frontend@sha256:929aad333ef96528d2e6c281fd3c0f75ef88ae271e600ee81c3c0e25a20eb3a1",
       "cpu": 0,
       "portMappings": [
@@ -10,7 +10,7 @@
           "containerPort": 5173,
           "hostPort": 5173,
           "protocol": "tcp",
-          "name": "cinecritic-frontend-container-5173-tcp",
+          "name": "cinecritic-frontend-5173-tcp",
           "appProtocol": "http"
         }
       ],
