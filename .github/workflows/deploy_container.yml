@@ -23,7 +23,7 @@ jobs:
             ECS_CLUSTER: cinecritic-cluster
             ECS_SERVICE: cinecritic-frontend-launcher
             ECS_TASK_DEFINITION: task-definition.json
-            CONTAINER_NAME: cinecritic-frontend-app
+            CONTAINER_NAME: cinecritic-frontend-container
 
         steps:
             - name: Checkout the latest version of the code
@@ -35,7 +35,6 @@ jobs:
                 aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
                 aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                 aws-region: ${{ env.AWS_REGION }}
-                # role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
             
             - name: Login to Amazon ECR
               id: login-ecr
@@ -43,17 +42,6 @@ jobs:
 
             - name: Verify aws identity
               run: aws sts get-caller-identity
-
-            # - name: Build, tag, and push docker image to Amazon ECR
-            #   id: build-image
-            #   env:
-            #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-            #     IMAGE_TAG: ${{ github.sha }}
-            #   run:
-            #     # Build the docker container and push it to Amazon ECR
-            #     docker compose down --remove-orphans 
-            #     docker compose build -t $ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG .
-            #     docker push $ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG
 
             - name: Fill in the new image id in the amazon ecs task definition
               id: task-definer
