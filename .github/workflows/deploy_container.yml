@@ -18,13 +18,14 @@ jobs:
           contents: read
 
         env:
-            AWS_REGION: ap-southeast-2
-            ECR_REPOSITORY: cinecritic-frontend
-            ECS_CLUSTER: cinecritic-cluster
-            ECS_SERVICE: cinecritic-frontend-launcher-service-u62rcodr
-            ECS_TASK_DEFINITION: task-definition.json
-            CONTAINER_NAME: cinecritic-frontend-container
-
+          GITHUB_REPOSITORY: macfluffy/cinecritic-frontend  
+          AWS_REGION: ap-southeast-2
+          ECR_REPOSITORY: cinecritic-frontend
+          ECS_CLUSTER: cinecritic-cluster
+          ECS_SERVICE: cinecritic-frontend-launcher-service-u62rcodr
+          ECS_TASK_DEFINITION: task-definition.json
+          CONTAINER_NAME: cinecritic-frontend-container
+            
         steps:
             - name: Checkout the latest version of the code
               uses: actions/checkout@v6
@@ -44,23 +45,18 @@ jobs:
             # - name: Verify aws identity
             #   run: aws sts get-caller-identity
 
-            # repo name to lowercase
-            - name: Convert repo name to lowercase
-              id: lowercase
-              run: echo "repo_name_lc=${github.repository##*/}" | tr '[:upper:]' '[:lower:]' >> $GITHUB_ENV
+            - name: Fill in the new image id in the amazon ecs task definition
+              id: task-definer
+              uses: aws-actions/amazon-ecs-render-task-definition@v1
+              with:
+                task-definition: ${{ env.ECS_TASK_DEFINITION }}
+                container-name: ${{ env.CONTAINER_NAME }}
+                image: ghcr.io/${{ env.GITHUB_REPOSITORY }}:latest
 
-            # - name: Fill in the new image id in the amazon ecs task definition
-            #   id: task-definer
-            #   uses: aws-actions/amazon-ecs-render-task-definition@v1
-            #   with:
-            #     task-definition: ${{ env.ECS_TASK_DEFINITION }}
-            #     container-name: ${{ env.CONTAINER_NAME }}
-            #     image: ghcr.io/${{ github.repository }}:latest
-
-            # - name: Deploy amazon ecs task definition
-            #   uses: aws-actions/amazon-ecs-deploy-task-definition@v2
-            #   with:
-            #     task-definition: ${{ steps.task-definer.outputs.task-definition }}
-            #     service: ${{ env.ECS_SERVICE }}
-            #     cluster: ${{ env.ECS_CLUSTER }}
-            #     wait-for-service-stability: true
+            - name: Deploy amazon ecs task definition
+              uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+              with:
+                task-definition: ${{ steps.task-definer.outputs.task-definition }}
+                service: ${{ env.ECS_SERVICE }}
+                cluster: ${{ env.ECS_CLUSTER }}
+                wait-for-service-stability: true
